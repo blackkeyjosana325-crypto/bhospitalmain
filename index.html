@@ -1,0 +1,1082 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>B市第一人民医院官方网站</title>
+
+<style>
+
+body{
+    margin:0;
+    font-family:"Microsoft YaHei",Arial,sans-serif;
+    background:#f4f8fb;
+    color:#333;
+}
+
+
+header{
+    background:linear-gradient(to right,#0077b6,#00b4d8);
+    color:white;
+    text-align:center;
+    padding:25px;
+}
+
+
+header h1{
+    margin:0;
+    font-size:32px;
+}
+
+
+nav{
+    background:white;
+    display:flex;
+    justify-content:center;
+    flex-wrap:wrap;
+    gap:15px;
+    padding:15px;
+    box-shadow:0 2px 5px #ccc;
+}
+
+
+nav button{
+
+    background:#0077b6;
+    color:white;
+    border:none;
+    padding:12px 20px;
+    border-radius:5px;
+    cursor:pointer;
+
+}
+
+
+nav button:hover{
+
+    background:#005f8a;
+
+}
+
+
+
+.banner{
+
+    height:220px;
+    background:#90e0ef;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    color:white;
+    font-size:30px;
+    font-weight:bold;
+
+}
+
+
+
+.container{
+
+    width:90%;
+    margin:30px auto;
+
+}
+
+
+
+.card{
+
+    background:white;
+    padding:25px;
+    border-radius:10px;
+    box-shadow:0 3px 8px #ddd;
+
+}
+
+
+
+.card h2{
+
+    color:#0077b6;
+
+}
+
+
+
+.news-item{
+
+    padding:20px;
+    border-bottom:1px solid #ddd;
+
+}
+
+
+
+.news-item h3{
+
+    color:#0077b6;
+    cursor:pointer;
+
+}
+
+
+
+.news-item h3:hover{
+
+    text-decoration:underline;
+
+}
+
+
+
+.detail{
+
+    line-height:2;
+
+}
+
+
+
+.detail h2{
+
+    color:#0077b6;
+
+}
+
+
+
+.detail p{
+
+    white-space:pre-line;
+
+}
+
+
+
+.button{
+
+    background:#0077b6;
+    color:white;
+    border:none;
+    padding:10px 20px;
+    border-radius:5px;
+    cursor:pointer;
+
+}
+
+
+
+.page-btn{
+
+    background:#00b4d8;
+    color:white;
+    border:none;
+    padding:10px 20px;
+    margin:5px;
+    border-radius:5px;
+    cursor:pointer;
+
+}
+
+
+
+input{
+
+    padding:10px;
+    width:250px;
+
+}
+
+
+
+footer{
+
+    background:#0077b6;
+    color:white;
+    text-align:center;
+    padding:20px;
+    margin-top:40px;
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<header>
+
+<h1>
+B市第一人民医院官方网站
+</h1>
+
+<p>
+守护生命 · 服务健康 · 共建美好未来
+</p>
+
+</header>
+
+
+
+
+<nav>
+
+
+<button onclick="showNewsList()">
+医院新闻
+</button>
+
+
+<button onclick="showNoticeList()">
+医院内部通知
+</button>
+
+
+<button onclick="showPatientQuery()">
+患者查询
+</button>
+
+
+<button onclick="showVisitors()">
+访客记录
+</button>
+
+
+<button>
+医院介绍
+</button>
+
+
+<button>
+科室导航
+</button>
+
+
+<button>
+预约挂号
+</button>
+
+
+<button>
+联系我们
+</button>
+
+
+</nav>
+
+
+
+
+<div class="banner">
+
+欢迎访问B市第一人民医院
+
+</div>
+
+
+
+
+
+<div class="container">
+
+
+<div class="card">
+
+
+<h2 id="moduleTitle">
+
+医院新闻
+
+</h2>
+
+
+
+<div id="newsArea"></div>
+
+
+<div id="noticeArea" style="display:none;"></div>
+
+
+<div id="patientArea" style="display:none;"></div>
+
+
+
+<div>
+
+<button class="page-btn" onclick="changePage(1)">
+第1页
+</button>
+
+
+<button class="page-btn" onclick="changePage(2)">
+第2页
+</button>
+
+
+</div>
+
+
+</div>
+
+
+
+
+<br>
+
+
+
+<div class="card">
+
+
+<h2>
+医疗服务
+</h2>
+
+
+<p>
+提供预约挂号、在线咨询、检查查询等服务。
+</p>
+
+
+<button class="button">
+进入服务大厅
+</button>
+
+
+</div>
+
+
+
+</div>
+
+
+
+
+
+<footer>
+
+©2026 B市第一人民医院 版权所有
+
+</footer>
+
+
+
+<script>
+// =============================
+// 医院新闻数据
+// =============================
+
+let newsData={
+
+
+1:{
+
+title:"我院分院白衣天使辛勤加班助患者脱离险境",
+
+date:"2026/05/20",
+
+content:
+
+"由于总院医疗结构调整，我院分院临时接收多名需要重症监护治疗的患者。\n\n"+
+
+"面对患者数量增加和护理任务繁重等情况，分院护理团队迅速投入工作，加强患者护理、病情观察以及医疗配合，全力保障患者生命安全。\n\n"+
+
+"其中护士长李秀芹始终坚守岗位，带领护理人员连续工作，合理安排护理任务，长期奋战在临床一线，鲜少回家。\n\n"+
+
+"在全体医护人员共同努力下，患者病情得到有效控制，分院护理团队用责任和担当守护患者健康。"
+
+},
+
+
+
+2:{
+
+title:"总院重症监护室数量充足，从容应对各项难关",
+
+date:"2026/05/19",
+
+content:
+
+"面对医疗需求变化和患者救治工作的不断推进，我院总院提前做好医疗资源储备工作。\n\n"+
+
+"目前，总院重症监护室数量充足，医疗设备运行稳定，医护人员配置完善，整体接诊能力仍保持良好状态。\n\n"+
+
+"医院持续加强医疗资源统筹管理，完善应急保障机制，提高重症患者救治效率。\n\n"+
+
+"凭借充足的医疗条件和专业医疗团队，总院能够有效应对各种医疗挑战，为患者提供安全、高效的医疗服务。"
+
+},
+
+
+
+3:{
+
+title:"我院分院启用最新血液鉴定系统",
+
+date:"2026/03/10",
+
+content:
+
+"为进一步提升医学检测水平，提高临床辅助检测能力，我院分院今日起正式启用最新BtB（Blood to Blood）血液鉴定系统。\n\n"+
+
+"该系统采用先进的数据分析技术，通过对两份血液样本中的多个关键指标进行综合比对，实现高效、稳定的血液特征分析。\n\n"+
+
+"当系统接收到两份血液样本后，如果关键指标相似程度大于90%，系统可以识别两份血液样本具有直系亲缘关系的可能性。\n\n"+
+
+"据医学科普介绍，亲子之间关键指标相似程度通常在91%-97%之间，而亲兄弟姐妹之间由于遗传组合差异，相似程度通常约为83%-88%。\n\n"+
+
+"相比传统检测流程，BtB血液鉴定系统能够提供更加稳定的数据分析结果，为亲缘关系辅助检测提供技术支持。\n\n"+
+
+"医院表示，该系统投入使用后，将进一步完善分院医学检测能力，提高相关检测工作的效率和稳定性。"
+
+}
+
+
+};
+
+
+
+
+// =============================
+// 内部通知数据
+// =============================
+
+
+let noticeData={
+
+
+1:{
+
+title:"重症病人转院通知",
+
+date:"2026/5/10",
+
+content:
+
+"经过总院批准，根据医院医疗资源统筹安排，将于5月13日、5月17日、5月19日分批将总院重症患者转入分院。\n\n"+
+
+"请护理人员提前做好人员安排和工作准备，合理调配护理力量，确保患者转运以及后续护理工作顺利进行。\n\n"+
+
+"相关科室需加强沟通协调，做好患者交接、病情记录以及护理保障工作。",
+
+approver:"黄杰"
+
+}
+
+
+};
+
+
+
+
+
+// =============================
+// 显示新闻列表
+// =============================
+
+
+function showNewsList(){
+
+
+moduleTitle.innerHTML="医院新闻";
+
+
+newsArea.style.display="block";
+
+noticeArea.style.display="none";
+
+patientArea.style.display="none";
+
+
+newsArea.innerHTML="";
+
+
+
+for(let id in newsData){
+
+
+let n=newsData[id];
+
+
+newsArea.innerHTML+=`
+
+<div class="news-item">
+
+
+<h3 onclick="openNews(${id})">
+
+${n.title}
+
+</h3>
+
+
+<p>
+
+发布时间：${n.date}
+
+</p>
+
+
+<p>
+
+${n.content.substring(0,80)}……
+
+</p>
+
+
+</div>
+
+`;
+
+
+}
+
+
+}
+
+
+
+
+// =============================
+// 新闻详情
+// =============================
+
+
+function openNews(id){
+
+
+let n=newsData[id];
+
+
+newsArea.innerHTML=`
+
+<div class="detail">
+
+
+<h2>
+
+${n.title}
+
+</h2>
+
+
+<p>
+
+发布时间：${n.date}
+
+</p>
+
+
+<p>
+
+${n.content}
+
+</p>
+
+
+<button class="button"
+
+onclick="showNewsList()">
+
+返回新闻列表
+
+</button>
+
+
+</div>
+
+`;
+
+
+
+}
+
+
+
+
+
+// =============================
+// 内部通知列表
+// =============================
+
+
+function showNoticeList(){
+
+
+moduleTitle.innerHTML="医院内部通知";
+
+
+newsArea.style.display="none";
+
+patientArea.style.display="none";
+
+noticeArea.style.display="block";
+
+
+noticeArea.innerHTML="";
+
+
+
+for(let id in noticeData){
+
+
+let n=noticeData[id];
+
+
+noticeArea.innerHTML+=`
+
+<div class="news-item">
+
+
+<h3 onclick="openNotice(${id})">
+
+${n.title}
+
+</h3>
+
+
+<p>
+
+发布时间：${n.date}
+
+</p>
+
+
+</div>
+
+`;
+
+
+}
+
+
+}
+
+
+
+
+function openNotice(id){
+
+
+let n=noticeData[id];
+
+
+noticeArea.innerHTML=`
+
+<div class="detail">
+
+
+<h2>
+
+${n.title}
+
+</h2>
+
+
+<p>
+
+发布时间：${n.date}
+
+</p>
+
+
+<p>
+
+${n.content}
+
+</p>
+
+
+<p>
+
+批准人：${n.approver}
+
+</p>
+
+
+
+<button class="button"
+
+onclick="showNoticeList()">
+
+返回通知列表
+
+</button>
+
+
+</div>
+
+`;
+
+
+
+}
+
+
+
+
+
+// =============================
+// 患者查询模块
+// =============================
+
+
+function showPatientQuery(){
+
+
+moduleTitle.innerHTML="患者查询";
+
+
+newsArea.style.display="none";
+
+noticeArea.style.display="none";
+
+patientArea.style.display="block";
+
+
+
+patientArea.innerHTML=`
+
+<div class="detail">
+
+
+<h2>
+
+体检报告查询
+
+</h2>
+
+
+
+<p>
+
+请输入患者姓名：
+
+</p>
+
+
+<input id="patientName"
+
+placeholder="请输入姓名">
+
+
+<br><br>
+
+
+
+<button class="button"
+
+onclick="queryReport()">
+
+查询体检报告
+
+</button>
+
+
+<div id="reportResult"></div>
+
+
+</div>
+
+`;
+
+
+
+}
+
+
+
+
+
+function queryReport(){
+
+
+let name=document.getElementById("patientName").value;
+
+
+let result=document.getElementById("reportResult");
+
+
+
+if(name==="黄杰"){
+
+
+result.innerHTML=`
+
+<hr>
+
+
+<h3>
+体检报告
+</h3>
+
+
+<p>
+患者姓名：黄杰
+</p>
+
+
+<p>
+检查日期：2024/10/15
+</p>
+
+
+<p>
+检查医生：梅毛冰
+</p>
+
+
+<p>
+审核护士：李秀芹
+</p>
+
+
+<p>
+检查结果：
+一切正常。
+</p>
+
+`;
+
+
+
+}
+
+
+
+else if(name==="余明辉"){
+
+
+result.innerHTML=`
+
+<hr>
+
+
+<h3>
+体检报告
+</h3>
+
+
+<p>
+患者姓名：余明辉
+</p>
+
+
+<p>
+检查日期：2024/10/15
+</p>
+
+
+<p>
+检查医生：梅毛冰
+</p>
+
+
+<p>
+审核护士：李秀芹
+</p>
+
+
+<p>
+检查结果：
+被患者（或其家属）要求保密，查看需要密码。
+</p>
+
+
+<input id="reportPassword"
+
+type="password"
+
+placeholder="请输入密码">
+
+
+<button class="button"
+
+onclick="verifyPassword()">
+
+确认
+
+</button>
+
+
+<div id="passwordResult"></div>
+
+
+`;
+
+
+
+}
+
+
+
+else{
+
+
+result.innerHTML=`
+
+<hr>
+
+<h3>
+无检查记录
+</h3>
+
+`;
+
+}
+
+
+}
+
+
+
+
+
+function verifyPassword(){
+
+
+let password=document.getElementById("reportPassword").value;
+
+
+let result=document.getElementById("passwordResult");
+
+
+
+if(password==="20060818"){
+
+
+result.innerHTML=`
+
+<p>
+
+检查结果：
+
+患者具有先天生殖功能障碍，终生无法生殖。
+
+</p>
+
+`;
+
+
+
+}
+
+
+else{
+
+
+result.innerHTML=`
+
+<p style="color:red">
+
+密码错误
+
+</p>
+
+`;
+
+}
+
+
+}
+
+
+
+
+
+// =============================
+// 访客记录
+// =============================
+
+
+function showVisitors(){
+
+
+alert(
+
+"访客记录\n\n"+
+
+"今日访问人数：356人\n"+
+
+"本月访问人数：9850人\n"+
+
+"累计访问人数：128560人"
+
+);
+
+
+}
+
+
+
+
+
+// =============================
+// 分页
+// =============================
+
+
+function changePage(page){
+
+
+if(page==1){
+
+showNewsList();
+
+}
+
+else{
+
+
+newsArea.innerHTML=`
+
+<div class="news-item">
+
+
+<h3>
+
+暂无更多新闻
+
+</h3>
+
+
+<p>
+
+后续医院新闻将在此更新。
+
+</p>
+
+
+</div>
+
+`;
+
+}
+
+
+}
+
+
+
+
+// 页面初始化
+
+window.onload=function(){
+
+showNewsList();
+
+};
+
+
+</script>
+
+
+</body>
+
+</html>
