@@ -1,0 +1,549 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FindPhones // Device Lookup</title>
+
+<style>
+:root {
+  --bg: #080d10;
+  --panel: #10191c;
+  --line: #293a3b;
+  --text: #e4eeeb;
+  --muted: #788b84;
+  --green: #8be0b8;
+  --red: #e27b70;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: var(--bg);
+  color: var(--text);
+  font-family: "Microsoft YaHei", "PingFang SC", sans-serif;
+  letter-spacing: .03em;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  opacity: .13;
+  background-image:
+    linear-gradient(rgba(139,224,184,.08) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(139,224,184,.08) 1px, transparent 1px);
+  background-size: 42px 42px;
+}
+
+header {
+  height: 76px;
+  padding: 0 6%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--line);
+  background: #0a1113;
+  position: relative;
+  z-index: 2;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+}
+
+.logo {
+  width: 36px;
+  height: 36px;
+  border: 1px solid var(--green);
+  display: grid;
+  place-items: center;
+  color: var(--green);
+  font: bold 19px Consolas, monospace;
+  transform: rotate(45deg);
+}
+
+.logo span {
+  transform: rotate(-45deg);
+}
+
+.brand-name {
+  font: bold 18px Consolas, monospace;
+  letter-spacing: .14em;
+}
+
+.brand-sub {
+  font: 9px Consolas, monospace;
+  color: var(--muted);
+  letter-spacing: .2em;
+  margin-top: 5px;
+}
+
+.status {
+  font: 10px Consolas, monospace;
+  color: var(--muted);
+  letter-spacing: .12em;
+}
+
+.status i {
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  background: var(--green);
+  border-radius: 50%;
+  margin-right: 8px;
+  box-shadow: 0 0 12px var(--green);
+}
+
+main {
+  width: min(850px, 90%);
+  margin: 0 auto;
+  padding: 105px 0 100px;
+  position: relative;
+}
+
+.kicker {
+  font: 10px Consolas, monospace;
+  letter-spacing: .28em;
+  color: var(--green);
+  margin-bottom: 22px;
+}
+
+h1 {
+  font: bold clamp(42px, 7vw, 68px) Consolas, monospace;
+  margin: 0;
+  letter-spacing: .04em;
+}
+
+h1 span {
+  color: var(--green);
+}
+
+.subtitle {
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 2;
+  margin: 20px 0 45px;
+}
+
+.search-panel {
+  border: 1px solid var(--line);
+  background: var(--panel);
+  padding: 28px;
+  position: relative;
+}
+
+.search-panel::before,
+.search-panel::after {
+  content: "";
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  border-color: var(--green);
+}
+
+.search-panel::before {
+  top: -1px;
+  left: -1px;
+  border-top: 1px solid;
+  border-left: 1px solid;
+}
+
+.search-panel::after {
+  bottom: -1px;
+  right: -1px;
+  border-bottom: 1px solid;
+  border-right: 1px solid;
+}
+
+.panel-label {
+  font: 10px Consolas, monospace;
+  color: #8ca19a;
+  letter-spacing: .2em;
+  margin-bottom: 16px;
+}
+
+.search-row {
+  display: flex;
+  gap: 10px;
+}
+
+input {
+  flex: 1;
+  min-width: 0;
+  height: 52px;
+  background: #080f12;
+  border: 1px solid #304341;
+  color: var(--text);
+  padding: 0 16px;
+  font-size: 14px;
+  outline: none;
+}
+
+input::placeholder {
+  color: #536762;
+}
+
+input:focus {
+  border-color: var(--green);
+}
+
+button {
+  font-family: inherit;
+}
+
+.search-btn {
+  height: 52px;
+  padding: 0 25px;
+  background: var(--green);
+  border: 0;
+  color: #08130f;
+  font: bold 12px Consolas, monospace;
+  letter-spacing: .1em;
+  cursor: pointer;
+}
+
+.search-btn:hover {
+  background: #b0f2d1;
+}
+
+.hint {
+  font: 10px Consolas, monospace;
+  color: #647a73;
+  margin-top: 14px;
+}
+
+.result {
+  display: none;
+  margin-top: 22px;
+  border: 1px solid var(--line);
+  background: #0b1417;
+  padding: 23px;
+}
+
+.result.show {
+  display: block;
+  animation: appear .3s ease;
+}
+
+@keyframes appear {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.result-head {
+  font: 10px Consolas, monospace;
+  color: var(--green);
+  letter-spacing: .16em;
+  margin-bottom: 20px;
+}
+
+.result-name {
+  font-size: 22px;
+  margin-bottom: 9px;
+}
+
+.result-meta {
+  font: 10px Consolas, monospace;
+  color: var(--muted);
+  margin-bottom: 20px;
+}
+
+.open-link {
+  display: inline-block;
+  text-decoration: none;
+  color: #08130f;
+  background: var(--green);
+  padding: 13px 18px;
+  font: bold 11px Consolas, monospace;
+  letter-spacing: .1em;
+  transition: .2s;
+}
+
+.open-link:hover {
+  background: #b0f2d1;
+}
+
+.error {
+  display: none;
+  margin-top: 20px;
+  padding: 18px;
+  border: 1px solid #633d3a;
+  background: #1b1112;
+  color: #e69a8e;
+  font-size: 12px;
+  line-height: 1.8;
+}
+
+.error.show {
+  display: block;
+  animation: appear .3s ease;
+}
+
+.error-code {
+  font: 10px Consolas, monospace;
+  color: var(--red);
+  margin-bottom: 7px;
+  letter-spacing: .15em;
+}
+
+.bottom-info {
+  display: flex;
+  justify-content: space-between;
+  gap: 15px;
+  margin-top: 27px;
+  color: #52655f;
+  font: 9px Consolas, monospace;
+  letter-spacing: .12em;
+}
+
+footer {
+  border-top: 1px solid var(--line);
+  padding: 22px 6%;
+  display: flex;
+  justify-content: space-between;
+  color: #52645e;
+  font: 9px Consolas, monospace;
+  letter-spacing: .12em;
+}
+
+@media(max-width:600px) {
+  header {
+    height: 68px;
+    padding: 0 18px;
+  }
+
+  .status {
+    font-size: 8px;
+  }
+
+  main {
+    padding: 70px 0;
+  }
+
+  .search-panel {
+    padding: 20px;
+  }
+
+  .search-row {
+    flex-direction: column;
+  }
+
+  .search-btn {
+    width: 100%;
+  }
+
+  .bottom-info,
+  footer {
+    flex-direction: column;
+    gap: 10px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <div class="brand">
+    <div class="logo"><span>F</span></div>
+    <div>
+      <div class="brand-name">FindPhones</div>
+      <div class="brand-sub">DEVICE TRACE TERMINAL</div>
+    </div>
+  </div>
+
+  <div class="status">
+    <i></i>SYSTEM ONLINE / SECURE ACCESS
+  </div>
+</header>
+
+<main>
+
+  <div class="kicker">
+    PRIVATE NETWORK // DEVICE INDEX
+  </div>
+
+  <h1>Find<span>Phones</span></h1>
+
+  <p class="subtitle">
+    输入姓名，检索关联设备入口。<br>
+    请输入完整姓名以查询目标手机。
+  </p>
+
+  <section class="search-panel">
+
+    <div class="panel-label">
+      TARGET IDENTIFICATION / 目标检索
+    </div>
+
+    <div class="search-row">
+      <input
+        id="personName"
+        type="text"
+        placeholder="输入查询对象姓名..."
+        autocomplete="off"
+      >
+
+      <button class="search-btn" onclick="searchDevice()">
+        SEARCH ↗
+      </button>
+    </div>
+
+    <div class="hint">
+      姓名精确匹配 · 查询结果将显示可访问的设备终端
+    </div>
+
+    <!-- 查询成功 -->
+    <div class="result" id="result">
+
+      <div class="result-head">
+        TARGET LOCATED / 设备入口已匹配
+      </div>
+
+      <div class="result-name" id="resultName"></div>
+
+      <div class="result-meta">
+        DEVICE STATUS: INDEXED
+        &nbsp;&nbsp; ACCESS: AVAILABLE
+      </div>
+
+      <a
+        class="open-link"
+        id="phoneLink"
+        href="#"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        OPEN DEVICE TERMINAL ↗
+      </a>
+
+    </div>
+
+    <!-- 查询失败 -->
+    <div class="error" id="error">
+
+      <div class="error-code">
+        ERROR 404 / NO DEVICE RECORD
+      </div>
+
+      未找到该姓名对应的手机设备。<br>
+      请检查输入内容，或确认目标是否存在于当前索引库。
+
+    </div>
+
+  </section>
+
+  <div class="bottom-info">
+    <span>INDEX NODE: FP-07A</span>
+    <span>DATABASE: DEVICE DIRECTORY</span>
+    <span>ENCRYPTION: ACTIVE</span>
+  </div>
+
+</main>
+
+<footer>
+  <span>FindPhones © 2026</span>
+  <span>DEVICE LOOKUP TERMINAL</span>
+  <span>FICTIONAL GAME INTERFACE</span>
+</footer>
+
+<script>
+
+// 手机查询数据库
+const deviceDirectory = {
+
+  "金燕":
+  "https://blackkeyjosana325-crypto.github.io/bhospitalmain/jyphone",
+
+  "余明辉":
+  "https://blackkeyjosana325-crypto.github.io/bhospitalmain/ymhphone",
+
+  "李秀芹":
+  "https://blackkeyjosana325-crypto.github.io/bhospitalmain/lxqphone",
+
+  "黄驰雨":
+  "https://blackkeyjosana325-crypto.github.io/bhospitalmain/hcyphone",
+
+  "叶倩倩":
+  "https://blackkeyjosana325-crypto.github.io/bhospitalmain/yqqphone",
+
+  "黄杰":
+  "https://blackkeyjosana325-crypto.github.io/bhospitalmain/hjphone",
+
+  "余沐":
+  "https://blackkeyjosana325-crypto.github.io/bhospitalmain/ymphone"
+
+};
+
+
+// 执行查询
+function searchDevice() {
+
+  const name = document
+    .getElementById("personName")
+    .value
+    .trim();
+
+  const result = document.getElementById("result");
+  const error = document.getElementById("error");
+
+  // 清除上一次结果
+  result.classList.remove("show");
+  error.classList.remove("show");
+
+  // 判断姓名是否存在
+  if (
+    Object.prototype.hasOwnProperty.call(
+      deviceDirectory,
+      name
+    )
+  ) {
+
+    // 显示查询成功
+    document.getElementById("resultName").textContent = name;
+
+    document.getElementById("phoneLink").href =
+      deviceDirectory[name];
+
+    result.classList.add("show");
+
+  } else {
+
+    // 显示查询失败
+    error.classList.add("show");
+
+  }
+
+}
+
+
+// 支持回车查询
+document
+  .getElementById("personName")
+  .addEventListener("keydown", function(event) {
+
+    if (event.key === "Enter") {
+      searchDevice();
+    }
+
+  });
+
+</script>
+
+</body>
+</html>
