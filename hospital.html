@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>米瑞尔医院 · 官方服务平台</title>
+<style>
+:root{--ink:#172b35;--muted:#71828a;--teal:#397d7b;--teal2:#dcebea;--line:#e5eceb;--paper:#f6f8f7;--white:#fff;--gold:#b69a68}
+*{box-sizing:border-box} body{margin:0;background:var(--paper);color:var(--ink);font-family:"PingFang SC","Microsoft YaHei",sans-serif;letter-spacing:.02em}
+header{height:78px;background:#fff;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:0 max(5vw,24px);position:sticky;top:0;z-index:5}
+.brand{display:flex;align-items:center;gap:13px}.mark{width:36px;height:36px;border:1px solid var(--teal);border-radius:11px;display:grid;place-items:center;color:var(--teal);font-size:22px;font-weight:300}.brand strong{font-size:18px;letter-spacing:.15em}.brand small{display:block;color:#8b999d;font-size:9px;letter-spacing:.2em;margin-top:3px}
+nav{display:flex;gap:8px;align-items:center}nav button{border:0;background:transparent;padding:12px 16px;color:#60727a;font-size:13px;cursor:pointer;border-radius:7px;transition:.2s}nav button:hover,nav button.active{background:#edf4f3;color:var(--teal)}
+main{max-width:1120px;margin:0 auto;padding:56px 28px 90px}.view{display:none;animation:fade .35s ease}.view.active{display:block}@keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.eyebrow{color:var(--teal);font-size:11px;letter-spacing:.22em;text-transform:uppercase;margin-bottom:16px}.hero{min-height:410px;display:grid;grid-template-columns:1.15fr .85fr;align-items:center;gap:55px}.hero h1{font-size:clamp(38px,5vw,62px);font-weight:400;letter-spacing:.12em;line-height:1.25;margin:0 0 20px}.hero p{color:var(--muted);font-size:14px;line-height:2.1;max-width:480px}.hero-art{height:310px;border-radius:3px;background:linear-gradient(145deg,#e4efed,#c8ddda);position:relative;overflow:hidden}.hero-art:before,.hero-art:after{content:"";position:absolute;border:1px solid rgba(57,125,123,.35);border-radius:50%;width:280px;height:280px;left:50%;top:50%;transform:translate(-50%,-50%)}.hero-art:after{width:190px;height:190px}.cross{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);color:#397d7b;font-size:84px;font-weight:200;opacity:.75}.hero-note{position:absolute;bottom:22px;left:24px;font-size:10px;letter-spacing:.2em;color:#587b79}
+.quick{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:24px}.quick button{background:#fff;border:1px solid var(--line);padding:25px;text-align:left;cursor:pointer;min-height:120px;transition:.2s}.quick button:hover{border-color:#9bbfba;transform:translateY(-2px)}.quick b{display:block;font-size:15px;font-weight:500;margin-bottom:10px}.quick span{font-size:12px;color:var(--muted)}
+.page-head{margin:10px 0 34px}.page-head h2{font-size:30px;font-weight:400;letter-spacing:.1em;margin:0 0 10px}.page-head p{color:var(--muted);font-size:13px;margin:0}
+.panel{background:#fff;border:1px solid var(--line);padding:34px;max-width:790px}.field-label{display:block;font-size:12px;color:#52666e;margin:0 0 10px}.input-row{display:flex;gap:10px}.input-row input,.field input{width:100%;height:46px;border:1px solid #dce5e3;padding:0 14px;font-size:14px;outline:none;background:#fff;color:var(--ink)}input:focus{border-color:var(--teal)}.primary{height:46px;padding:0 25px;background:var(--teal);color:white;border:0;cursor:pointer;font-size:13px;letter-spacing:.08em;white-space:nowrap}.primary:hover{background:#2e6967}.hint{font-size:11px;color:#9aa7aa;margin-top:12px}.result{margin-top:24px;border-top:1px solid var(--line);padding-top:24px;display:none}.result.show{display:block}.result-title{font-size:13px;color:var(--teal);letter-spacing:.12em;margin-bottom:18px}.data-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:0 28px}.data{padding:13px 0;border-bottom:1px solid #eef2f1;display:flex;justify-content:space-between;gap:15px;font-size:13px}.data span:first-child{color:#89979b}.data span:last-child{text-align:right}.alert{margin-top:18px;padding:14px 16px;background:#f7f4ed;border-left:2px solid var(--gold);font-size:13px;line-height:1.8;color:#665a45}.error{color:#a65c52;font-size:12px;margin-top:12px;display:none}.error.show{display:block}
+.locked{max-width:650px;text-align:center;padding:58px 30px;background:#fff;border:1px solid var(--line)}.lock-icon{width:58px;height:58px;border:1px solid #d8e3e1;border-radius:50%;display:grid;place-items:center;margin:0 auto 22px;color:var(--teal);font-size:23px}.locked h3{font-size:20px;font-weight:400;letter-spacing:.12em;margin:0 0 12px}.locked p{font-size:13px;color:var(--muted);line-height:1.9}.tiny-link{display:inline-block;margin-top:23px;color:#9aa5a7;font-size:10px;text-decoration:underline;cursor:pointer;letter-spacing:.08em}
+.monitor-wrap{max-width:900px}.loading{display:none;min-height:300px;background:#101d22;color:#8ce0c9;padding:40px;font-family:Consolas,monospace;font-size:12px;line-height:2;letter-spacing:.08em}.loading.show{display:block}.loading .bar{height:2px;background:#263d41;margin:24px 0;overflow:hidden}.loading .bar i{display:block;height:100%;width:0;background:#7bd9bd;animation:load 1.5s linear forwards}@keyframes load{to{width:100%}}.monitor-results{display:none}.monitor-results.show{display:block}.cam{background:#111c20;color:#d3e3dd;padding:22px 24px;margin-bottom:12px;border:1px solid #273b3e}.cam-top{display:flex;justify-content:space-between;gap:12px;color:#82b9aa;font:11px Consolas,monospace;border-bottom:1px solid #314348;padding-bottom:12px;margin-bottom:14px}.cam p{font-size:13px;line-height:1.9;margin:0;color:#e0e8e4}.cam small{color:#839a94}
+.dual{display:grid;grid-template-columns:1fr 1fr;gap:12px}.dual .field{min-width:0}.match-result{padding:22px;background:#f0f6f4;border:1px solid #dceae6;margin-top:22px;display:none}.match-result.show{display:block}.match-result strong{display:block;font-size:20px;font-weight:400;margin:10px 0;color:var(--teal)}.footer{border-top:1px solid var(--line);padding:24px 5vw;color:#9aa6a8;font-size:10px;display:flex;justify-content:space-between;letter-spacing:.1em}
+@media(max-width:760px){header{height:auto;min-height:72px;align-items:flex-start;flex-direction:column;padding:16px 20px;gap:12px}nav{width:100%;overflow-x:auto}nav button{white-space:nowrap;padding:10px 12px;font-size:12px}main{padding:35px 18px 65px}.hero{grid-template-columns:1fr;gap:24px}.hero-art{height:210px}.quick{grid-template-columns:1fr}.panel{padding:23px 18px}.data-grid,.dual{grid-template-columns:1fr}.input-row{flex-direction:column}.input-row .primary{width:100%}.footer{gap:10px;flex-direction:column}}
+</style>
+</head>
+<body>
+<header>
+ <div class="brand"><div class="mark">M</div><div><strong>米瑞尔医院</strong><small>MIRIEL MEDICAL CENTER</small></div></div>
+ <nav aria-label="主导航">
+  <button class="active" data-view="home">首页</button>
+  <button data-view="report">体检报告查询</button>
+  <button data-view="monitor">监控查询</button>
+  <button data-view="dna">亲子鉴定查询</button>
+ </nav>
+</header>
+<main>
+<section id="home" class="view active">
+ <div class="hero">
+  <div><div class="eyebrow">MIRIEL · CARE & PRECISION</div><h1>以专业，<br>守护每一份信任。</h1><p>米瑞尔医院致力于提供严谨、细致的医疗服务。我们以专业标准为基础，以患者需求为中心，持续完善医疗质量与服务体验。</p></div>
+  <div class="hero-art"><div class="cross">＋</div><div class="hero-note">MIRIEL MEDICAL CENTER　/　EST. 1998</div></div>
+ </div>
+ <div class="quick">
+  <button onclick="showView('report')"><b>体检报告查询　↗</b><span>查看个人健康检查记录</span></button>
+  <button onclick="showView('monitor')"><b>监控查询　↗</b><span>院内监控系统访问入口</span></button>
+  <button onclick="showView('dna')"><b>亲子鉴定查询　↗</b><span>查询血液样本检测结果</span></button>
+ </div>
+</section>
+<section id="report" class="view">
+ <div class="page-head"><div class="eyebrow">PATIENT SERVICE / 01</div><h2>体检报告查询</h2><p>请输入患者姓名，查询对应体检档案。</p></div>
+ <div class="panel">
+  <label class="field-label" for="patientName">患者姓名</label>
+  <div class="input-row"><input id="patientName" placeholder="请输入患者姓名" autocomplete="off"><button class="primary" onclick="searchReport()">查询报告</button></div>
+  <div class="hint">报告信息仅供本游戏剧情使用。</div><div id="reportError" class="error">未查询到该患者的体检档案，请核对姓名后重试。</div>
+  <div id="reportResult" class="result"></div>
+ </div>
+</section>
+<section id="monitor" class="view">
+ <div class="page-head"><div class="eyebrow">SECURITY SYSTEM / 02</div><h2>监控查询</h2><p>院内影像资料访问管理。</p></div>
+ <div class="locked"><div class="lock-icon">⌑</div><h3>访问权限不足</h3><p>当前账户未获得监控影像查看权限。<br>如需访问，请联系系统管理员。</p><span class="tiny-link" onclick="startMonitor()">删除监控查询</span></div>
+ <div id="loading" class="loading"><div> MIRIEL CCTV ARCHIVE // SYSTEM OVERRIDE</div><div>正在连接影像存储节点……</div><div>验证本地索引…… <span>OK</span></div><div>正在重建已删除记录……</div><div class="bar"><i></i></div><div id="loadPct">ACCESSING ARCHIVE 00%</div></div>
+ <div id="monitorResults" class="monitor-results">
+  <div class="page-head" style="margin-top:28px"><h2 style="font-size:21px">监控影像记录</h2><p>ARCHIVE RECOVERED　/　3 RECORDS</p></div>
+  <div class="cam"><div class="cam-top"><span>ID：LXQ</span><span>2026/02/15　19:00</span></div><p>一女护士打开了两个档案袋，交换了其中一张纸，随后将档案袋重新封存。</p></div>
+  <div class="cam"><div class="cam-top"><span>ID：LXQ</span><span>2026/08/25　14:30</span></div><p>一女护士看到了鉴定间准备架上放置的、标注着“余明辉”的试管血液。随后，护士用“黄杰”标签替换了“余明辉”标签。</p></div>
+  <div class="cam"><div class="cam-top"><span>ID：HJ</span><span>2026/08/25　14:40</span></div><p>一男研究员拿着贴有“黄驰雨”（A）与“金燕”（B）标签的试管进入鉴定间。鉴定间内已有一管标注“余沐”（C）和一管标注“黄杰”（D）的血液。男研究员交换了“黄驰雨”与“余沐”的标签。</p></div>
+ </div>
+</section>
+<section id="dna" class="view">
+ <div class="page-head"><div class="eyebrow">LABORATORY / 03</div><h2>亲子鉴定查询</h2><p>输入两位样本提供者姓名，查询血液样本检测结果。</p></div>
+ <div class="panel">
+  <div class="dual">
+   <div class="field"><label class="field-label" for="personA">样本提供者 A</label><input id="personA" placeholder="请输入姓名" autocomplete="off"></div>
+   <div class="field"><label class="field-label" for="personB">样本提供者 B</label><input id="personB" placeholder="请输入姓名" autocomplete="off"></div>
+  </div>
+  <button class="primary" style="margin-top:20px" onclick="searchDNA()">查询鉴定结果</button>
+  <div id="dnaError" class="error">未查询到对应的检测记录，请检查姓名是否正确。</div>
+  <div id="dnaResult" class="match-result"><div class="eyebrow">TEST RESULT</div><div id="dnaTime" style="font-size:12px;color:#718b86"></div><strong id="dnaText"></strong><div style="font-size:11px;color:#82938f">米瑞尔医院检验科 · 血液样本检测</div></div>
+ </div>
+</section>
+</main>
+<footer class="footer"><span>© 2026 MIRIEL MEDICAL CENTER</span><span>米瑞尔医院 · 医疗服务平台</span><span>本页面为虚构游戏道具</span></footer>
+<script>
+const navButtons=[...document.querySelectorAll('nav button')];
+function showView(id){document.querySelectorAll('.view').forEach(v=>v.classList.toggle('active',v.id===id));navButtons.forEach(b=>b.classList.toggle('active',b.dataset.view===id));window.scrollTo({top:0,behavior:'smooth'});}
+navButtons.forEach(b=>b.addEventListener('click',()=>showView(b.dataset.view)));
+const patients={
+ '黄杰':{date:'2026/02/15',birth:'09/30',id:'9101**********0076',weight:'60kg',notes:['存在严重3D眩晕症状','生育能力正常']},
+ '黄驰雨':{date:'2026/02/15',birth:'08/18',id:'9101**********3692',weight:'110kg',notes:['对蟹类食物严重过敏，不建议食用此类食物']},
+ '余明辉':{date:'2026/02/15',birth:'05/15',id:'9100**********211X',weight:'83kg',notes:[]}
+};
+function searchReport(){
+ const name=document.getElementById('patientName').value.trim(), p=patients[name], err=document.getElementById('reportError'), box=document.getElementById('reportResult');
+ err.classList.remove('show');box.classList.remove('show');box.innerHTML='';
+ if(!p){err.classList.add('show');return;}
+ let rows=`<div class="result-title">体检档案　/　${name}</div><div class="data-grid">
+ <div class="data"><span>体检日期</span><span>${p.date}</span></div><div class="data"><span>出生月日</span><span>${p.birth}</span></div>
+ <div class="data"><span>身份证</span><span>${p.id}</span></div><div class="data"><span>体重</span><span>${p.weight}</span></div></div>`;
+ if(name==='余明辉'){
+  rows+=`<div class="alert">部分体检内容已根据患者或其家属要求加密。请输入访问密码以查看隐藏内容。</div>
+  <div style="display:flex;gap:10px;margin-top:16px"><input id="secretPass" type="password" placeholder="请输入访问密码" style="height:44px;border:1px solid #dce5e3;padding:0 12px;flex:1;min-width:0"><button class="primary" onclick="unlockSecret()">验证</button></div><div id="secretError" class="error">密码错误，请重新输入。</div><div id="secretContent"></div>`;
+ }else{rows+=`<div class="alert">${p.notes.join('；')}</div>`;}
+ box.innerHTML=rows;box.classList.add('show');
+}
+function unlockSecret(){
+ const pass=document.getElementById('secretPass').value;
+ const err=document.getElementById('secretError'), content=document.getElementById('secretContent');
+ if(pass==='20020818'){err.classList.remove('show');content.innerHTML='<div class="alert" style="background:#f7f1ef;border-color:#b8786d;color:#80544e">加密体检内容：患者具有先天生殖功能障碍，终生无法生殖。</div>';}
+ else{content.innerHTML='';err.classList.add('show');}
+}
+function startMonitor(){
+ const loading=document.getElementById('loading'), results=document.getElementById('monitorResults');
+ results.classList.remove('show');loading.classList.add('show');loading.scrollIntoView({behavior:'smooth',block:'center'});
+ const pct=document.getElementById('loadPct');let start=Date.now();
+ const timer=setInterval(()=>{let n=Math.min(100,Math.floor((Date.now()-start)/15));pct.textContent='ACCESSING ARCHIVE '+String(n).padStart(2,'0')+'%';if(n>=100){clearInterval(timer);loading.classList.remove('show');results.classList.add('show');results.scrollIntoView({behavior:'smooth',block:'start'});}},15);
+}
+function searchDNA(){
+ const a=document.getElementById('personA').value.trim(),b=document.getElementById('personB').value.trim();
+ const err=document.getElementById('dnaError'),box=document.getElementById('dnaResult');err.classList.remove('show');box.classList.remove('show');
+ const pair=[a,b].sort().join('|');
+ if(pair===['黄杰','余沐'].sort().join('|')){document.getElementById('dnaTime').textContent='检测时间：8月25日　15:00';document.getElementById('dnaText').textContent='检测结果：样本不存在亲缘关系';}
+ else if(pair===['黄驰雨','金燕'].sort().join('|')){document.getElementById('dnaTime').textContent='检测时间：8月25日　15:30';document.getElementById('dnaText').textContent='检测结果：样本存在亲缘关系';}
+ else{err.classList.add('show');return;}
+ box.classList.add('show');
+}
+document.getElementById('patientName').addEventListener('keydown',e=>{if(e.key==='Enter')searchReport()});
+document.querySelectorAll('#personA,#personB').forEach(el=>el.addEventListener('keydown',e=>{if(e.key==='Enter')searchDNA()}));
+</script>
+</body>
+</html>

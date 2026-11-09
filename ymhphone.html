@@ -1,0 +1,460 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>余明辉的手机</title>
+<style>
+*{box-sizing:border-box}
+body{
+ margin:0;background:#dce4e1;
+ font-family:-apple-system,BlinkMacSystemFont,"Microsoft YaHei",sans-serif;
+ display:flex;justify-content:center;align-items:center;
+ min-height:100vh;color:#222;padding:20px
+}
+.phone{
+ width:390px;height:820px;max-height:95vh;
+ background:#f7f7f7;border:9px solid #202326;
+ border-radius:40px;overflow:hidden;position:relative;
+ box-shadow:0 20px 60px #0003
+}
+.status{
+ height:30px;padding:6px 20px;
+ display:flex;justify-content:space-between;
+ font-size:11px;font-weight:bold;background:#f7f7f7
+}
+.screen{height:calc(100% - 30px);position:relative;overflow:hidden}
+.lock{
+ position:absolute;inset:0;z-index:10;
+ background:linear-gradient(150deg,#344b55,#111e29);
+ color:white;display:flex;flex-direction:column;
+ align-items:center;padding:75px 25px 25px;text-align:center
+}
+.clock{font-size:62px;font-weight:200;margin:0}
+.date{font-size:14px;color:#ccd6d9;margin:5px 0 65px}
+.avatar{
+ width:72px;height:72px;border-radius:50%;
+ background:linear-gradient(135deg,#d6ded8,#82958b);
+ display:grid;place-items:center;font-size:28px;color:#33483e
+}
+.owner{margin:13px 0 22px;font-size:17px}
+.lock input{
+ width:250px;padding:13px;border:1px solid #ffffff55;
+ background:#ffffff15;color:white;border-radius:8px;
+ text-align:center;font-size:17px;letter-spacing:5px
+}
+.lock input::placeholder{color:#bbb;letter-spacing:1px}
+.unlock{
+ width:250px;margin-top:12px;padding:12px;
+ border:0;border-radius:8px;background:#dce9e2;
+ color:#20372d;font-size:15px;cursor:pointer
+}
+.error{height:25px;color:#ffb5a8;font-size:12px;margin-top:8px}
+.lock small{margin-top:auto;color:#aab9bc}
+.home{
+ height:100%;padding:25px 20px;
+ background:linear-gradient(150deg,#e5ece8,#cbd9d3);
+ display:none;flex-direction:column
+}
+.home h1{font-size:28px;color:#263c34;margin:8px 0 30px}
+.home-date{font-size:13px;color:#75837d}
+.apps{display:grid;grid-template-columns:repeat(4,1fr);gap:25px 10px}
+.app{
+ border:0;background:none;display:flex;flex-direction:column;
+ align-items:center;gap:7px;font-size:12px;cursor:pointer
+}
+.app-icon{
+ width:56px;height:56px;border-radius:15px;
+ display:grid;place-items:center;font-size:27px;
+ box-shadow:0 4px 10px #0002
+}
+.achat-icon{background:linear-gradient(135deg,#2cdb70,#05a64e);color:white}
+.home-foot{margin-top:auto;text-align:center;color:#77847e;font-size:11px}
+.appview{height:100%;display:none;flex-direction:column;background:#f5f5f5}
+.appview.active{display:flex}
+.topbar{
+ height:49px;flex-shrink:0;background:#f8f8f8;
+ border-bottom:1px solid #e5e5e5;
+ display:flex;align-items:center;justify-content:center;
+ position:relative;font-size:16px;font-weight:600
+}
+.back{
+ position:absolute;left:13px;border:0;background:none;
+ font-size:26px;cursor:pointer
+}
+.tabs{height:47px;display:flex;background:#f8f8f8;border-bottom:1px solid #ddd}
+.tab{
+ flex:1;border:0;background:none;color:#888;
+ font-size:14px;position:relative;cursor:pointer
+}
+.tab.active{color:#222;font-weight:bold}
+.tab.active:after{
+ content:"";position:absolute;bottom:0;left:35%;
+ width:30%;height:3px;background:#07c160
+}
+.content{flex:1;overflow:auto}
+.hidden{display:none!important}
+.chat-person{
+ display:flex;align-items:center;gap:12px;
+ background:white;padding:13px 15px;border-bottom:1px solid #eee;
+ cursor:pointer
+}
+.person-avatar,.post-avatar{
+ width:46px;height:46px;border-radius:9px;
+ background:#e6c9c1;color:#805b52;
+ display:grid;place-items:center;font-weight:bold;flex-shrink:0
+}
+.chat-meta{flex:1;min-width:0}
+.chat-name{font-size:15px;margin-bottom:6px}
+.chat-preview{
+ font-size:12px;color:#999;white-space:nowrap;
+ overflow:hidden;text-overflow:ellipsis
+}
+.chat-time{font-size:10px;color:#aaa;align-self:flex-start}
+.messages{padding:15px 12px 25px;background:#ededed;min-height:100%}
+.day{text-align:center;color:#aaa;font-size:11px;margin:16px 0}
+.msg{display:flex;gap:8px;margin:13px 0;align-items:flex-start}
+.msg.mine{flex-direction:row-reverse}
+.msg-avatar{
+ width:34px;height:34px;border-radius:7px;
+ background:#c6d3ce;display:grid;place-items:center;
+ color:#38534a;font-size:13px;flex-shrink:0
+}
+.msg.mine .msg-avatar{background:#d8c8b5;color:#6a5037}
+.bubble-wrap{max-width:78%}
+.msg-meta{font-size:10px;color:#999;margin:0 4px 5px}
+.msg.mine .msg-meta{text-align:right}
+.bubble{
+ background:white;padding:10px 12px;border-radius:4px;
+ font-size:13px;line-height:1.6;overflow-wrap:anywhere
+}
+.msg.mine .bubble{background:#95ec69}
+.post{
+ display:flex;gap:11px;padding:17px 14px;
+ background:white;border-bottom:1px solid #eee
+}
+.post-main{flex:1;min-width:0}
+.post-name{font-size:14px;color:#526d9a;font-weight:bold;margin-bottom:7px}
+.post-text{font-size:14px;line-height:1.6;margin-bottom:9px}
+.post-image{
+ display:block;width:100%;max-width:270px;
+ max-height:290px;object-fit:cover;margin-top:8px;
+ border-radius:3px;background:#eee
+}
+.location{font-size:11px;color:#718aa9;margin-top:8px}
+.post-time{font-size:11px;color:#aaa;margin-top:9px}
+.owner-card{
+ display:flex;align-items:center;gap:13px;
+ padding:20px 15px;background:white;cursor:pointer
+}
+.owner-avatar{
+ width:58px;height:58px;border-radius:50%;
+ background:#d8c8b5;color:#6a5037;
+ display:grid;place-items:center;font-size:21px;font-weight:bold
+}
+.owner-name{font-size:17px;font-weight:bold}
+.owner-sub{font-size:11px;color:#999;margin-top:5px}
+.locked-wall{
+ margin:18px 14px;background:white;border-radius:9px;
+ padding:25px 18px;text-align:center
+}
+.locked-symbol{font-size:35px;margin-bottom:10px}
+.locked-wall h3{font-size:16px;margin:0 0 8px}
+.locked-wall p{font-size:12px;color:#888;margin:0 0 18px}
+.unlock-moments{
+ background:#07c160;color:white;border:0;
+ padding:10px 22px;border-radius:5px;cursor:pointer
+}
+.pass-panel{padding:25px 20px;text-align:center}
+.pass-panel h3{font-size:16px}
+.pass-panel p{font-size:12px;color:#777;margin:12px 0 18px}
+.pass-panel input{
+ width:100%;padding:12px;border:1px solid #ddd;
+ border-radius:6px;text-align:center;font-size:15px
+}
+.pass-panel button{
+ margin-top:12px;width:100%;padding:11px;
+ border:0;border-radius:6px;background:#07c160;color:white
+}
+.pass-error{font-size:12px;color:#d45d50;height:20px;margin-top:7px}
+@media(max-width:430px){
+ body{padding:0;background:#111}
+ .phone{width:100vw;height:100dvh;max-height:none;border:0;border-radius:0}
+}
+</style>
+</head>
+
+<body>
+<div class="phone">
+ <div class="status"><span>9:41</span><span>●●●　Wi-Fi　▰</span></div>
+ <div class="screen">
+
+  <!-- 手机锁屏 -->
+  <section class="lock" id="lockScreen">
+   <p class="clock">20:18</p>
+   <p class="date">星期五 · 9月5日</p>
+   <div class="avatar">余</div>
+   <div class="owner">余明辉</div>
+   <input id="phonePassword" type="password"
+          inputmode="numeric" placeholder="输入锁屏密码" maxlength="8">
+   <button class="unlock" onclick="unlockPhone()">解锁手机</button>
+   <div class="error" id="lockError"></div>
+   <small>个人设备 · 本地模拟</small>
+  </section>
+
+  <!-- 手机桌面 -->
+  <section class="home" id="homeScreen">
+   <div class="home-date">星期五 · 9月5日</div>
+   <h1>余明辉</h1>
+   <div class="apps">
+    <button class="app" onclick="openApp()">
+     <span class="app-icon achat-icon">聊</span>AChat
+    </button>
+    <button class="app">
+     <span class="app-icon" style="background:#e9e6d9">📷</span>相机
+    </button>
+    <button class="app">
+     <span class="app-icon" style="background:#cbd3da">⚙</span>设置
+    </button>
+   </div>
+   <div class="home-foot">AChat · 即时通讯</div>
+  </section>
+
+  <!-- AChat -->
+  <section class="appview" id="achatApp">
+   <header class="topbar">
+    <button class="back" onclick="goHome()">‹</button>
+    AChat
+   </header>
+
+   <nav class="tabs">
+    <button class="tab active" id="chatTab" onclick="toggleTab('chat')">聊天</button>
+    <button class="tab" id="momentsTab" onclick="toggleTab('moments')">朋友圈</button>
+   </nav>
+
+   <!-- 聊天列表 -->
+   <div class="content" id="chatList">
+    <div class="chat-person" onclick="openConversation()">
+     <div class="person-avatar">金</div>
+     <div class="chat-meta">
+      <div class="chat-name">金燕</div>
+      <div class="chat-preview">余明辉：明天回来给我打电话，我来接你。</div>
+     </div>
+     <div class="chat-time">5月15日</div>
+    </div>
+   </div>
+
+   <!-- 与金燕的聊天记录 -->
+   <div class="content hidden" id="conversation">
+    <div class="messages">
+
+     <div class="day">2025年6月8日</div>
+     <div class="msg mine"><div class="msg-avatar">余</div><div class="bubble-wrap">
+      <div class="msg-meta">余明辉 15:30</div>
+      <div class="bubble">今天你可以像之前那样做饭给我吃吗？我想吃回锅肉。</div>
+     </div></div>
+     <div class="msg"><div class="msg-avatar">金</div><div class="bubble-wrap">
+      <div class="msg-meta">金燕 16:02</div>
+      <div class="bubble">没问题。</div>
+     </div></div>
+     <div class="msg mine"><div class="msg-avatar">余</div><div class="bubble-wrap">
+      <div class="msg-meta">余明辉 16:05</div>
+      <div class="bubble">相信你，你做的饭最好吃了！</div>
+     </div></div>
+
+     <div class="day">2025年7月13日</div>
+     <div class="msg mine"><div class="msg-avatar">余</div><div class="bubble-wrap">
+      <div class="msg-meta">余明辉 16:30</div>
+      <div class="bubble">今天你可以像之前那样做饭给我吃吗？我想吃锅包肉。</div>
+     </div></div>
+     <div class="msg"><div class="msg-avatar">金</div><div class="bubble-wrap">
+      <div class="msg-meta">金燕 17:02</div>
+      <div class="bubble">没问题。</div>
+     </div></div>
+     <div class="msg mine"><div class="msg-avatar">余</div><div class="bubble-wrap">
+      <div class="msg-meta">余明辉 17:05</div>
+      <div class="bubble">相信你，你做的饭最好吃了！</div>
+     </div></div>
+
+     <div class="day">2025年11月20日</div>
+     <div class="msg mine"><div class="msg-avatar">余</div><div class="bubble-wrap">
+      <div class="msg-meta">余明辉 13:30</div>
+      <div class="bubble">今天我想吃小葱拌豆腐，水煮鱼。</div>
+     </div></div>
+     <div class="msg"><div class="msg-avatar">金</div><div class="bubble-wrap">
+      <div class="msg-meta">金燕 17:02</div>
+      <div class="bubble">没问题。</div>
+     </div></div>
+     <div class="msg mine"><div class="msg-avatar">余</div><div class="bubble-wrap">
+      <div class="msg-meta">余明辉 17:05</div>
+      <div class="bubble">相信你，你做的饭最好吃了！</div>
+     </div></div>
+
+     <div class="day">2026年5月15日</div>
+     <div class="msg"><div class="msg-avatar">金</div><div class="bubble-wrap">
+      <div class="msg-meta">金燕 20:08</div>
+      <div class="bubble">老公，我今天在C市玩，但是我记错高铁时间了，现在被困在高铁站了，今天没有能回B市的高铁了，我可能只能明天回来了。</div>
+     </div></div>
+     <div class="msg mine"><div class="msg-avatar">余</div><div class="bubble-wrap">
+      <div class="msg-meta">余明辉 20:09</div>
+      <div class="bubble">好的，我看到你的好友圈了。注意安全。明天回来给我打电话，我来接你。</div>
+     </div></div>
+
+    </div>
+   </div>
+
+   <!-- 朋友圈动态 -->
+   <div class="content hidden" id="momentsFeed">
+    <div class="post">
+     <div class="post-avatar">金</div>
+     <div class="post-main">
+      <div class="post-name">金燕</div>
+      <div class="post-text">困在C市的一天 </div>
+      <img class="post-image" src="jinyan.png" alt="金燕的朋友圈图片"
+       onerror="this.outerHTML='<div style=&quot;padding:55px 5px;color:#999;background:#eee;margin-top:8px&quot;>图片未找到：jinyan.png</div>'">
+      <div class="location">📍 C市</div>
+      <div class="post-time">2026年5月15日 20:03</div>
+     </div>
+    </div>
+
+    <!-- 点击自己的头像进入个人朋友圈 -->
+    <div class="owner-card" onclick="openMyMoments()">
+     <div class="owner-avatar">余</div>
+     <div>
+      <div class="owner-name">余明辉</div>
+      <div class="owner-sub">查看我的朋友圈　›</div>
+     </div>
+    </div>
+   </div>
+
+   <!-- 余明辉的个人朋友圈 -->
+   <div class="content hidden" id="myMoments">
+    <div class="owner-card">
+     <div class="owner-avatar">余</div>
+     <div>
+      <div class="owner-name">余明辉</div>
+      <div class="owner-sub">个人朋友圈</div>
+     </div>
+    </div>
+
+    <div class="locked-wall" id="lockedWall">
+     <div class="locked-symbol">🔒</div>
+     <h3>朋友圈已加密</h3>
+     <p>此内容需要验证身份后查看</p>
+     <button class="unlock-moments" onclick="showMomentPassword()">输入密码查看</button>
+    </div>
+
+    <!-- 个人朋友圈密码验证 -->
+    <div class="pass-panel hidden" id="momentPasswordPanel">
+     <div style="font-size:28px">🔐</div>
+     <h3>请输入朋友圈密码</h3>
+     <p>密码提示：和儿子吃饭那天</p>
+     <input id="momentPassword" type="password"
+            inputmode="numeric" placeholder="输入密码" maxlength="8">
+     <button onclick="unlockMyMoments()">确认</button>
+     <div class="pass-error" id="momentError"></div>
+    </div>
+
+    <!-- 解锁后显示的仅自己可见动态 -->
+    <div class="hidden" id="privatePost">
+     <div class="post">
+      <div class="post-avatar" style="background:#d8c8b5;color:#6a5037">余</div>
+      <div class="post-main">
+       <div class="post-name">余明辉</div>
+       <div class="post-text">孩子真的很用心，做的饭菜很好吃</div>
+       <img class="post-image" src="chifan.png" alt="余明辉的朋友圈图片"
+        onerror="this.outerHTML='<div style=&quot;padding:55px 5px;color:#999;background:#eee;margin-top:8px&quot;>图片未找到：chifan.png</div>'">
+       <div class="post-time">2026年9月5日 19:00</div>
+       <div class="location">仅自己可见</div>
+      </div>
+     </div>
+    </div>
+   </div>
+
+  </section>
+ </div>
+</div>
+
+<script>
+// 手机锁屏密码
+function unlockPhone(){
+ const input=document.getElementById('phonePassword');
+ if(input.value==='19620515'){
+  document.getElementById('lockScreen').style.display='none';
+  document.getElementById('homeScreen').style.display='flex';
+ }else{
+  document.getElementById('lockError').textContent='密码错误，请重试';
+  input.value='';
+  input.focus();
+ }
+}
+document.getElementById('phonePassword').addEventListener('keydown',e=>{
+ if(e.key==='Enter')unlockPhone();
+});
+
+// 打开AChat
+function openApp(){
+ document.getElementById('homeScreen').style.display='none';
+ document.getElementById('achatApp').classList.add('active');
+ toggleTab('chat');
+}
+
+// 返回桌面
+function goHome(){
+ document.getElementById('achatApp').classList.remove('active');
+ document.getElementById('homeScreen').style.display='flex';
+}
+
+// 切换聊天/朋友圈
+function toggleTab(tab){
+ document.getElementById('chatTab').classList.toggle('active',tab==='chat');
+ document.getElementById('momentsTab').classList.toggle('active',tab==='moments');
+
+ ['chatList','conversation','momentsFeed','myMoments'].forEach(id=>{
+  document.getElementById(id).classList.add('hidden');
+ });
+
+ document.getElementById(
+  tab==='chat'?'chatList':'momentsFeed'
+ ).classList.remove('hidden');
+}
+
+// 打开金燕聊天
+function openConversation(){
+ document.getElementById('chatList').classList.add('hidden');
+ document.getElementById('conversation').classList.remove('hidden');
+}
+
+// 打开余明辉自己的朋友圈
+function openMyMoments(){
+ document.getElementById('momentsFeed').classList.add('hidden');
+ document.getElementById('myMoments').classList.remove('hidden');
+}
+
+// 显示朋友圈密码输入框
+function showMomentPassword(){
+ document.getElementById('lockedWall').classList.add('hidden');
+ document.getElementById('momentPasswordPanel').classList.remove('hidden');
+ document.getElementById('momentPassword').focus();
+}
+
+// 验证个人朋友圈密码
+function unlockMyMoments(){
+ const input=document.getElementById('momentPassword');
+
+ if(input.value==='20260905'){
+  document.getElementById('momentPasswordPanel').classList.add('hidden');
+  document.getElementById('privatePost').classList.remove('hidden');
+ }else{
+  document.getElementById('momentError').textContent='密码错误';
+  input.value='';
+ }
+}
+
+document.getElementById('momentPassword').addEventListener('keydown',e=>{
+ if(e.key==='Enter')unlockMyMoments();
+});
+</script>
+</body>
+</html>

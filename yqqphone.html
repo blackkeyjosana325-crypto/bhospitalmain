@@ -1,0 +1,256 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>叶倩倩的手机</title>
+<style>
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+body {
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #e8e8eb;
+    font-family: -apple-system, BlinkMacSystemFont, "Microsoft YaHei", sans-serif;
+}
+.phone {
+    width: 360px;
+    height: 740px;
+    background: #151515;
+    border: 8px solid #222;
+    border-radius: 42px;
+    overflow: hidden;
+    position: relative;
+    box-shadow: 0 15px 45px rgba(0,0,0,.25);
+}
+.screen {
+    height: 100%;
+    width: 100%;
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(150deg, #e9edf4, #f7f7fa);
+}
+.status {
+    height: 35px;
+    padding: 9px 20px 0;
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+    color: #222;
+}
+.status-right {
+    display: flex;
+    gap: 6px;
+}
+
+/* 锁屏 */
+#lockScreen {
+    position: absolute;
+    inset: 0;
+    z-index: 10;
+    background: linear-gradient(155deg, #313d52, #121b2a 80%);
+    color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 105px;
+}
+.lock-time {
+    font-size: 65px;
+    font-weight: 300;
+    letter-spacing: 2px;
+}
+.lock-date {
+    margin-top: 5px;
+    font-size: 15px;
+    color: #ddd;
+}
+.owner {
+    margin-top: 90px;
+    font-size: 16px;
+    letter-spacing: 4px;
+}
+.hint {
+    margin-top: 32px;
+    font-size: 13px;
+    color: #d9dce3;
+}
+.password {
+    width: 235px;
+    margin-top: 15px;
+    padding: 13px;
+    border: 1px solid rgba(255,255,255,.35);
+    border-radius: 12px;
+    background: rgba(255,255,255,.12);
+    outline: none;
+    color: white;
+    font-size: 15px;
+    text-align: center;
+}
+.password::placeholder {
+    color: #c3c7cf;
+}
+.unlock {
+    margin-top: 17px;
+    padding: 11px 42px;
+    border: none;
+    border-radius: 22px;
+    background: white;
+    color: #253248;
+    font-size: 14px;
+    cursor: pointer;
+}
+.error {
+    margin-top: 12px;
+    font-size: 12px;
+    color: #ffb7b7;
+}
+
+/* 手机桌面 */
+#home {
+    display: none;
+    height: 100%;
+    position: relative;
+}
+.home-title {
+    padding: 32px 22px 20px;
+    color: #737b89;
+    font-size: 13px;
+}
+.home-title strong {
+    display: block;
+    color: #263143;
+    font-size: 25px;
+    margin-top: 7px;
+}
+.app-grid {
+    display: flex;
+    padding: 24px;
+}
+.app {
+    width: 82px;
+    text-align: center;
+    cursor: pointer;
+}
+.app-icon {
+    width: 62px;
+    height: 62px;
+    border-radius: 17px;
+    margin: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(145deg, #e9a9b4, #bd536e);
+    box-shadow: 0 5px 12px rgba(160,70,100,.25);
+    color: white;
+    font-size: 29px;
+}
+.app-name {
+    font-size: 12px;
+    margin-top: 8px;
+    color: #333;
+}
+.dock {
+    position: absolute;
+    bottom: 20px;
+    left: 18px;
+    right: 18px;
+    height: 75px;
+    border-radius: 23px;
+    background: rgba(255,255,255,.55);
+}
+.home-indicator {
+    position: absolute;
+    bottom: 5px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 105px;
+    height: 4px;
+    border-radius: 5px;
+    background: #222;
+}
+</style>
+</head>
+<body>
+
+<div class="phone">
+    <div class="screen">
+
+        <!-- 锁屏页面 -->
+        <div id="lockScreen">
+            <div class="lock-time">19:00</div>
+            <div class="lock-date">11月9日 星期一</div>
+
+            <div class="owner">叶倩倩</div>
+
+            <div class="hint">密码提示：我喜欢的乐队是谁？</div>
+
+            <input
+                id="password"
+                class="password"
+                type="password"
+                placeholder="请输入锁屏密码"
+                onkeydown="if(event.key==='Enter') unlock()"
+            >
+
+            <button class="unlock" onclick="unlock()">解锁手机</button>
+
+            <div class="error" id="error"></div>
+        </div>
+
+        <!-- 手机桌面 -->
+        <div id="home">
+            <div class="status">
+                <span>19:00</span>
+                <div class="status-right">
+                    <span>5G</span>
+                    <span>▮▮▮</span>
+                    <span>🔋</span>
+                </div>
+            </div>
+
+            <div class="home-title">
+                我的手机
+                <strong>叶倩倩</strong>
+            </div>
+
+            <div class="app-grid">
+                <div class="app" onclick="openConcert()">
+                    <div class="app-icon">♫</div>
+                    <div class="app-name">演唱会歌单</div>
+                </div>
+            </div>
+
+            <div class="dock"></div>
+        </div>
+
+        <div class="home-indicator"></div>
+    </div>
+</div>
+
+<script>
+function unlock() {
+    const pwd = document.getElementById("password").value.trim().toLowerCase();
+
+    if (pwd === "wuyuetian" || pwd === "mayday") {
+        document.getElementById("lockScreen").style.display = "none";
+        document.getElementById("home").style.display = "block";
+    } else {
+        document.getElementById("error").innerText = "密码错误，请重新输入";
+    }
+}
+
+function openConcert() {
+    window.location.href =
+        "https://blackkeyjosana325-crypto.github.io/lovecheater/mayday";
+}
+</script>
+
+</body>
+</html>
