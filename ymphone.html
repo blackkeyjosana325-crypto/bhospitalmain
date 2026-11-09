@@ -1,0 +1,587 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>余沐的手机</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+    height:100vh;background:#e8e9ed;
+    display:flex;align-items:center;justify-content:center;
+    font-family:-apple-system,BlinkMacSystemFont,"Microsoft YaHei",sans-serif;
+}
+.phone{
+    width:375px;height:760px;background:#151515;
+    border:8px solid #222;border-radius:42px;
+    overflow:hidden;position:relative;
+    box-shadow:0 15px 45px #0003;
+}
+.screen{height:100%;width:100%;position:relative;overflow:hidden;background:#f4f5f8}
+.status{
+    height:34px;padding:8px 19px 0;
+    display:flex;justify-content:space-between;
+    font-size:12px;color:#222;flex-shrink:0;
+}
+.status-right{display:flex;gap:6px}
+.home-indicator{
+    position:absolute;bottom:5px;left:50%;
+    transform:translateX(-50%);width:105px;height:4px;
+    border-radius:5px;background:#222;z-index:30;
+}
+button{cursor:pointer;font-family:inherit}
+.page{display:none;position:absolute;inset:0;flex-direction:column;background:#f5f6f8}
+.page.active{display:flex}
+
+/* 桌面 */
+#desktop{
+    display:flex;flex-direction:column;
+    background:linear-gradient(150deg,#e9edf4,#f7f7f9);
+}
+.desktop-title{padding:35px 22px 25px;color:#777;font-size:13px}
+.desktop-title strong{display:block;font-size:26px;color:#283448;margin-top:7px}
+.app-grid{display:flex;gap:20px;padding:18px 23px}
+.app-icon-wrap{width:82px;text-align:center;cursor:pointer}
+.app-icon{
+    width:64px;height:64px;border-radius:18px;
+    display:flex;align-items:center;justify-content:center;
+    color:white;font-size:28px;margin:auto;
+    box-shadow:0 5px 12px #0002;
+}
+.game-icon{background:linear-gradient(145deg,#4d647b,#1c2b3d)}
+.show-icon{background:linear-gradient(145deg,#c49b70,#704c37)}
+.app-label{font-size:11px;color:#333;margin-top:9px;line-height:1.4}
+.dock{
+    position:absolute;bottom:22px;left:18px;right:18px;
+    height:72px;border-radius:23px;background:#ffffff80;
+}
+
+/* 通用顶部 */
+.topbar{
+    height:55px;background:white;border-bottom:1px solid #eee;
+    display:flex;align-items:center;padding:0 15px;gap:12px;flex-shrink:0;
+}
+.back{font-size:26px;color:#333;cursor:pointer;width:23px}
+.top-title{font-size:16px;font-weight:650;color:#222}
+.top-sub{font-size:10px;color:#999;margin-top:3px}
+.content{flex:1;overflow-y:auto;padding:15px}
+
+/* 游戏助手主页 */
+#gameHome{background:#f2f4f7}
+.game-banner{
+    margin:15px;border-radius:17px;padding:22px 18px;
+    color:white;background:linear-gradient(120deg,#253e58,#101d2e);
+    min-height:145px;position:relative;overflow:hidden;
+}
+.game-banner:after{
+    content:"DELTA";position:absolute;right:-8px;bottom:3px;
+    font-size:48px;font-weight:900;color:#ffffff13;
+}
+.banner-small{font-size:11px;color:#c3d0dd;letter-spacing:2px}
+.banner-title{font-size:24px;font-weight:750;margin-top:13px}
+.banner-desc{font-size:11px;color:#cbd5df;margin-top:8px}
+.user-card{
+    background:white;border-radius:14px;margin:0 15px 15px;
+    padding:15px;display:flex;align-items:center;gap:12px;
+}
+.avatar{
+    width:46px;height:46px;border-radius:14px;
+    background:#e4eaf1;display:flex;align-items:center;
+    justify-content:center;font-size:22px;
+}
+.user-name{font-size:15px;font-weight:650;color:#263547}
+.user-meta{font-size:11px;color:#999;margin-top:5px}
+.menu-title{font-size:13px;font-weight:700;color:#333;margin:18px 16px 10px}
+.menu-list{padding:0 15px;display:flex;flex-direction:column;gap:10px}
+.menu-item{
+    background:white;border-radius:13px;padding:16px;
+    display:flex;align-items:center;gap:13px;cursor:pointer;
+}
+.menu-symbol{
+    width:40px;height:40px;border-radius:12px;
+    background:#edf1f5;display:flex;align-items:center;
+    justify-content:center;font-size:19px;
+}
+.menu-name{font-size:14px;font-weight:600;color:#303943}
+.menu-desc{font-size:10px;color:#999;margin-top:4px}
+.menu-arrow{margin-left:auto;color:#aaa;font-size:20px}
+
+/* 聊天记录 */
+#chatPage{background:#edf0f4}
+.chat-friend{
+    padding:14px 15px;background:white;
+    display:flex;align-items:center;gap:11px;
+}
+.friend-avatar{
+    width:42px;height:42px;border-radius:50%;
+    background:linear-gradient(145deg,#d3b9a3,#8c715f);
+    display:flex;align-items:center;justify-content:center;
+    color:white;font-size:18px;
+}
+.friend-name{font-size:14px;font-weight:650}
+.friend-desc{font-size:10px;color:#999;margin-top:4px}
+.chat-scroll{flex:1;overflow-y:auto;padding:14px 12px 25px}
+.month-label{
+    text-align:center;font-size:11px;color:#999;
+    margin:17px 0 12px;
+}
+.chat-bubble-row{display:flex;gap:8px;margin-bottom:12px;align-items:flex-start}
+.chat-bubble-row.me{flex-direction:row-reverse}
+.chat-avatar{
+    width:29px;height:29px;border-radius:9px;flex-shrink:0;
+    display:flex;align-items:center;justify-content:center;
+    color:white;font-size:12px;
+}
+.me-avatar{background:#6485a4}
+.huang-avatar{background:#b58d6b}
+.chat-message{max-width:77%}
+.chat-sender{font-size:10px;color:#999;margin-bottom:5px}
+.me .chat-sender{text-align:right}
+.bubble{
+    padding:10px 12px;background:white;border-radius:12px;
+    font-size:12px;line-height:1.65;color:#333;
+    box-shadow:0 1px 3px #00000008;word-break:break-word;
+}
+.me .bubble{background:#d8e9fa}
+.gift{
+    color:#a36d30;font-size:11px;
+    background:#fff7e9;border-radius:9px;
+    padding:9px 11px;margin-bottom:12px;
+    text-align:center;
+}
+.chat-bottom{
+    height:52px;background:white;border-top:1px solid #eee;
+    display:flex;align-items:center;padding:0 13px;
+    color:#aaa;font-size:12px;flex-shrink:0;
+}
+.chat-input-fake{
+    background:#f1f2f4;border-radius:20px;padding:10px 14px;flex:1;
+}
+
+/* ID 查询 */
+.search-box{
+    background:white;padding:15px;border-radius:13px;
+    box-shadow:0 2px 7px #00000008;
+}
+.search-label{font-size:13px;font-weight:650;color:#333;margin-bottom:12px}
+.search-line{display:flex;gap:8px}
+.search-line input{
+    min-width:0;flex:1;border:1px solid #ddd;
+    border-radius:8px;padding:11px;font-size:13px;outline:none;
+}
+.search-btn{
+    border:0;background:#304d69;color:white;
+    border-radius:8px;padding:0 17px;font-size:12px;
+}
+.search-tip{font-size:10px;color:#aaa;margin-top:10px}
+.result-card{
+    display:none;background:white;border-radius:13px;
+    padding:17px;margin-top:15px;
+}
+.result-heading{
+    font-size:14px;font-weight:700;color:#2e4053;
+    padding-bottom:13px;border-bottom:1px solid #eee;
+}
+.result-row{
+    display:flex;justify-content:space-between;
+    gap:12px;padding:13px 0;border-bottom:1px solid #f1f1f1;
+    font-size:12px;
+}
+.result-row span:first-child{color:#999;flex-shrink:0}
+.result-row span:last-child{color:#333;text-align:right;word-break:break-all}
+.not-found{display:none;margin-top:15px;padding:15px;background:white;border-radius:12px;color:#999;font-size:12px}
+
+/* SHOW密室 */
+#showHome{background:#f6f2ed}
+.show-welcome{
+    margin:15px;border-radius:15px;padding:23px 18px;
+    color:white;background:linear-gradient(135deg,#48382e,#1d1917);
+}
+.show-welcome small{font-size:11px;color:#cbb9a7;letter-spacing:2px}
+.show-welcome h2{font-size:27px;margin-top:12px}
+.show-welcome p{font-size:11px;color:#d1c2b5;margin-top:8px}
+.booking-title{font-size:15px;font-weight:700;color:#47392f;margin:20px 16px 12px}
+.booking-card{
+    background:white;border-radius:14px;padding:16px;margin:0 15px 14px;
+}
+.booking-card h3{font-size:14px;color:#493b32;margin-bottom:14px}
+.field{margin-bottom:13px}
+.field label{display:block;font-size:11px;color:#888;margin-bottom:7px}
+.field input,.field select,.field textarea{
+    width:100%;border:1px solid #e5e0dc;border-radius:8px;
+    padding:10px;font-size:12px;color:#333;background:#fff;
+    font-family:inherit;outline:none;
+}
+.field textarea{resize:vertical;min-height:55px}
+.field-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.submit-booking{
+    width:100%;padding:12px;border:0;border-radius:9px;
+    background:#604936;color:white;font-size:13px;
+}
+.booking-note{
+    font-size:10px;color:#aaa;line-height:1.6;
+    margin:0 17px 15px;
+}
+.booking-success{
+    display:none;background:#edf5e9;color:#527448;
+    padding:12px;border-radius:9px;font-size:12px;
+    line-height:1.7;margin-top:12px;
+}
+@media(max-width:400px){
+    body{background:#111}
+    .phone{width:100vw;height:100vh;border:0;border-radius:0}
+}
+</style>
+</head>
+<body>
+<div class="phone">
+<div class="screen">
+
+    <!-- 手机桌面 -->
+    <section id="desktop" class="page active">
+        <div class="status">
+            <span>19:00</span>
+            <div class="status-right"><span>5G</span><span>▮▮▮</span><span>🔋</span></div>
+        </div>
+        <div class="desktop-title">
+            我的手机
+            <strong>余沐</strong>
+        </div>
+        <div class="app-grid">
+            <div class="app-icon-wrap" onclick="showPage('gameHome')">
+                <div class="app-icon game-icon">◈</div>
+                <div class="app-label">四角洲行动<br>游戏助手</div>
+            </div>
+            <div class="app-icon-wrap" onclick="showPage('showHome')">
+                <div class="app-icon show-icon">S</div>
+                <div class="app-label">SHOW密室</div>
+            </div>
+        </div>
+        <div class="dock"></div>
+    </section>
+
+    <!-- 四角洲行动助手主页 -->
+    <section id="gameHome" class="page">
+        <div class="status">
+            <span>19:00</span><div class="status-right"><span>5G</span><span>▮▮▮</span><span>🔋</span></div>
+        </div>
+        <div class="topbar">
+            <div class="back" onclick="showPage('desktop')">‹</div>
+            <div><div class="top-title">四角洲行动游戏助手</div><div class="top-sub">DELTA FORCE · 玩家中心</div></div>
+        </div>
+        <div class="content">
+            <div class="game-banner">
+                <div class="banner-small">DELTA FORCE PLAYER CENTER</div>
+                <div class="banner-title">欢迎号主小沐</div>
+                <div class="banner-desc">你的游戏数据与好友动态，都在这里</div>
+            </div>
+            <div class="user-card">
+                <div class="avatar">🎮</div>
+                <div>
+                    <div class="user-name">小沐</div>
+                    <div class="user-meta">游戏玩家 · 账号状态正常</div>
+                </div>
+            </div>
+            <div class="menu-title">功能服务</div>
+            <div class="menu-list">
+                <div class="menu-item" onclick="showPage('chatPage')">
+                    <div class="menu-symbol">💬</div>
+                    <div><div class="menu-name">游戏聊天查询</div><div class="menu-desc">查看好友聊天及组队记录</div></div>
+                    <div class="menu-arrow">›</div>
+                </div>
+                <div class="menu-item" onclick="showPage('idPage')">
+                    <div class="menu-symbol">🔎</div>
+                    <div><div class="menu-name">游戏 ID 查询</div><div class="menu-desc">查询玩家账号注册信息</div></div>
+                    <div class="menu-arrow">›</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 游戏聊天查询 -->
+    <section id="chatPage" class="page">
+        <div class="status">
+            <span>19:00</span><div class="status-right"><span>5G</span><span>▮▮▮</span><span>🔋</span></div>
+        </div>
+        <div class="topbar">
+            <div class="back" onclick="showPage('gameHome')">‹</div>
+            <div><div class="top-title">游戏聊天查询</div><div class="top-sub">好友聊天记录</div></div>
+        </div>
+        <div class="chat-friend">
+            <div class="friend-avatar">黄</div>
+            <div>
+                <div class="friend-name">黄家礼炮</div>
+                <div class="friend-desc">男性好友 · 双排搭档</div>
+            </div>
+        </div>
+        <div class="chat-scroll">
+
+            <div class="month-label">2026年1月</div>
+            <div class="chat-bubble-row">
+                <div class="chat-avatar huang-avatar">黄</div>
+                <div class="chat-message"><div class="chat-sender">黄家礼炮</div><div class="bubble">亲爱的，今天上线吗？我们本月已经一起双排 12 次了。</div></div>
+            </div>
+            <div class="chat-bubble-row me">
+                <div class="chat-avatar me-avatar">沐</div>
+                <div class="chat-message"><div class="chat-sender">余沐</div><div class="bubble">当然啦，亲爱的，再来一把。</div></div>
+            </div>
+
+            <div class="month-label">2026年2月</div>
+            <div class="chat-bubble-row">
+                <div class="chat-avatar huang-avatar">黄</div>
+                <div class="chat-message"><div class="chat-sender">黄家礼炮</div><div class="bubble">亲爱的，我们本月已经一起双排 18 次了，配合越来越好了。</div></div>
+            </div>
+            <div class="chat-bubble-row me">
+                <div class="chat-avatar me-avatar">沐</div>
+                <div class="chat-message"><div class="chat-sender">余沐</div><div class="bubble">亲爱的，咱俩这默契可不是一天练出来的。</div></div>
+            </div>
+
+            <div class="month-label">2026年3月</div>
+            <div class="chat-bubble-row me">
+                <div class="chat-avatar me-avatar">沐</div>
+                <div class="chat-message"><div class="chat-sender">余沐</div><div class="bubble">亲爱的，晚上有空吗？一起双排。</div></div>
+            </div>
+            <div class="chat-bubble-row">
+                <div class="chat-avatar huang-avatar">黄</div>
+                <div class="chat-message"><div class="chat-sender">黄家礼炮</div><div class="bubble">有空！我们本月已经一起双排 15 次了，继续保持。</div></div>
+            </div>
+
+            <div class="month-label">2026年4月</div>
+            <div class="chat-bubble-row">
+                <div class="chat-avatar huang-avatar">黄</div>
+                <div class="chat-message"><div class="chat-sender">黄家礼炮</div><div class="bubble">亲爱的，给你准备了个小礼物。</div></div>
+            </div>
+            <div class="gift">🎁 黄家礼炮 赠送给你一款限定游戏皮肤</div>
+            <div class="chat-bubble-row me">
+                <div class="chat-avatar me-avatar">沐</div>
+                <div class="chat-message"><div class="chat-sender">余沐</div><div class="bubble">收到啦！谢谢亲爱的，这皮肤我喜欢！</div></div>
+            </div>
+            <div class="chat-bubble-row">
+                <div class="chat-avatar huang-avatar">黄</div>
+                <div class="chat-message"><div class="chat-sender">黄家礼炮</div><div class="bubble">喜欢就好，亲爱的。我们本月已经一起双排 21 次了。</div></div>
+            </div>
+
+            <div class="month-label">2026年5月</div>
+            <div class="chat-bubble-row me">
+                <div class="chat-avatar me-avatar">沐</div>
+                <div class="chat-message"><div class="chat-sender">余沐</div><div class="bubble">亲爱的，今天再冲一冲排名！</div></div>
+            </div>
+            <div class="chat-bubble-row">
+                <div class="chat-avatar huang-avatar">黄</div>
+                <div class="chat-message"><div class="chat-sender">黄家礼炮</div><div class="bubble">走起！我们本月已经一起双排 19 次了。</div></div>
+            </div>
+
+            <div class="month-label">2026年6月</div>
+            <div class="chat-bubble-row">
+                <div class="chat-avatar huang-avatar">黄</div>
+                <div class="chat-message"><div class="chat-sender">黄家礼炮</div><div class="bubble">亲爱的，今晚还来吗？我们本月已经一起双排 23 次了。</div></div>
+            </div>
+            <div class="chat-bubble-row me">
+                <div class="chat-avatar me-avatar">沐</div>
+                <div class="chat-message"><div class="chat-sender">余沐</div><div class="bubble">来呀亲爱的，我等你组队。</div></div>
+            </div>
+
+            <div class="month-label">2026年7月</div>
+            <div class="chat-bubble-row">
+                <div class="chat-avatar huang-avatar">黄</div>
+                <div class="chat-message"><div class="chat-sender">黄家礼炮</div><div class="bubble">亲爱的，我们本月已经一起双排 26 次了，感觉每天都在一起打游戏。</div></div>
+            </div>
+            <div class="chat-bubble-row me">
+                <div class="chat-avatar me-avatar">沐</div>
+                <div class="chat-message"><div class="chat-sender">余沐</div><div class="bubble">那当然，亲爱的，你可是我的固定搭档。</div></div>
+            </div>
+
+            <div class="month-label">2026年8月</div>
+            <div class="chat-bubble-row me">
+                <div class="chat-avatar me-avatar">沐</div>
+                <div class="chat-message"><div class="chat-sender">余沐</div><div class="bubble">亲爱的，最近怎么没见你上线？</div></div>
+            </div>
+            <div class="chat-bubble-row">
+                <div class="chat-avatar huang-avatar">黄</div>
+                <div class="chat-message"><div class="chat-sender">黄家礼炮</div><div class="bubble">这就来！我们本月已经一起双排 17 次了，怎么能少了你。</div></div>
+            </div>
+        </div>
+        <div class="chat-bottom"><div class="chat-input-fake">发送消息……</div></div>
+    </section>
+
+    <!-- 游戏 ID 查询 -->
+    <section id="idPage" class="page">
+        <div class="status">
+            <span>19:00</span><div class="status-right"><span>5G</span><span>▮▮▮</span><span>🔋</span></div>
+        </div>
+        <div class="topbar">
+            <div class="back" onclick="showPage('gameHome')">‹</div>
+            <div><div class="top-title">游戏 ID 查询</div><div class="top-sub">玩家资料检索系统</div></div>
+        </div>
+        <div class="content">
+            <div class="search-box">
+                <div class="search-label">输入游戏 ID 查询号主信息</div>
+                <div class="search-line">
+                    <input id="gameIdInput" placeholder="请输入游戏 ID">
+                    <button class="search-btn" onclick="searchPlayer()">查询</button>
+                </div>
+                <div class="search-tip">支持查询游戏昵称：小沐、黄家礼炮</div>
+            </div>
+
+            <div class="result-card" id="playerResult">
+                <div class="result-heading">✓ 查询成功 · 玩家资料</div>
+                <div class="result-row"><span>游戏昵称</span><span id="rName"></span></div>
+                <div class="result-row"><span>游戏注册时间</span><span id="rDate"></span></div>
+                <div class="result-row"><span>号主身份证</span><span id="rId"></span></div>
+                <div class="result-row"><span>账号状态</span><span>正常</span></div>
+            </div>
+            <div class="not-found" id="notFound">未查询到该游戏 ID，请检查输入内容后重试。</div>
+        </div>
+    </section>
+
+    <!-- SHOW密室主页及预约 -->
+    <section id="showHome" class="page">
+        <div class="status">
+            <span>19:00</span><div class="status-right"><span>5G</span><span>▮▮▮</span><span>🔋</span></div>
+        </div>
+        <div class="topbar">
+            <div class="back" onclick="showPage('desktop')">‹</div>
+            <div><div class="top-title">SHOW密室</div><div class="top-sub">SHOW ESCAPE ROOM</div></div>
+        </div>
+        <div class="content">
+            <div class="show-welcome">
+                <small>WELCOME TO SHOW</small>
+                <h2>欢迎你，Y</h2>
+                <p>进入故事，寻找真相。下一场冒险即将开始。</p>
+            </div>
+
+            <div class="booking-title">密室玩家预约界面</div>
+            <div class="booking-card">
+                <h3>预约体验场次</h3>
+                <form id="bookingForm">
+                    <div class="field">
+                        <label>预约人昵称</label>
+                        <input id="bookingName" placeholder="请输入玩家昵称" required>
+                    </div>
+                    <div class="field-grid">
+                        <div class="field">
+                            <label>预约日期</label>
+                            <input id="bookingDate" type="date" required>
+                        </div>
+                        <div class="field">
+                            <label>预约时间</label>
+                            <select id="bookingTime">
+                                <option>10:00 - 12:00</option>
+                                <option>13:00 - 15:00</option>
+                                <option>15:30 - 17:30</option>
+                                <option>19:00 - 21:00</option>
+                                <option>21:30 - 23:30</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="field">
+                        <label>预约主题</label>
+                        <select id="bookingTheme">
+                            <option>《午夜来电》· 悬疑惊悚</option>
+                            <option>《最后一位乘客》· 现代推理</option>
+                            <option>《失踪的第七人》· 诡异恐怖</option>
+                            <option>《无人生还》· 经典本格</option>
+                            <option>《记忆迷宫》· 沉浸体验</option>
+                        </select>
+                    </div>
+                    <div class="field">
+                        <label>参与人数</label>
+                        <select id="bookingPeople">
+                            <option>2人</option>
+                            <option>3人</option>
+                            <option selected>4人</option>
+                            <option>5人</option>
+                            <option>6人</option>
+                            <option>7人</option>
+                            <option>8人</option>
+                        </select>
+                    </div>
+                    <div class="field">
+                        <label>备注信息</label>
+                        <textarea id="bookingRemark" placeholder="可填写特殊需求或同行玩家信息"></textarea>
+                    </div>
+                    <button class="submit-booking" type="submit">提交预约</button>
+                    <div class="booking-success" id="bookingSuccess"></div>
+                </form>
+            </div>
+            <div class="booking-note">
+                温馨提示：请提前15分钟到店签到。预约提交后请等待工作人员确认，具体场次以门店通知为准。
+            </div>
+        </div>
+    </section>
+
+    <div class="home-indicator"></div>
+</div>
+</div>
+
+<script>
+function showPage(id){
+    document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
+    document.getElementById(id).classList.add("active");
+}
+
+function searchPlayer(){
+    const input=document.getElementById("gameIdInput").value.trim();
+    const result=document.getElementById("playerResult");
+    const notFound=document.getElementById("notFound");
+    let player=null;
+
+    if(input==="小沐"){
+        player={
+            name:"小沐",
+            date:"2024年1月10日",
+            id:"910125200208181966"
+        };
+    }else if(input==="黄家礼炮"){
+        player={
+            name:"黄家礼炮",
+            date:"2018年4月5日",
+            id:"910181198209300076"
+        };
+    }
+
+    if(player){
+        document.getElementById("rName").textContent=player.name;
+        document.getElementById("rDate").textContent=player.date;
+        document.getElementById("rId").textContent=player.id;
+        result.style.display="block";
+        notFound.style.display="none";
+    }else{
+        result.style.display="none";
+        notFound.style.display="block";
+    }
+}
+
+document.getElementById("gameIdInput").addEventListener("keydown",function(e){
+    if(e.key==="Enter")searchPlayer();
+});
+
+document.getElementById("bookingForm").addEventListener("submit",function(e){
+    e.preventDefault();
+    const name=document.getElementById("bookingName").value.trim();
+    const date=document.getElementById("bookingDate").value;
+    const time=document.getElementById("bookingTime").value;
+    const theme=document.getElementById("bookingTheme").value;
+    const people=document.getElementById("bookingPeople").value;
+
+    const success=document.getElementById("bookingSuccess");
+    success.style.display="block";
+    success.innerHTML=
+        "✓ 预约信息已提交（模拟）<br>"+
+        "预约人："+escapeHTML(name)+"<br>"+
+        "预约日期："+escapeHTML(date)+"<br>"+
+        "预约场次："+escapeHTML(time)+"<br>"+
+        "预约主题："+escapeHTML(theme)+"<br>"+
+        "参与人数："+escapeHTML(people)+"<br>"+
+        "请等待门店工作人员确认。";
+});
+
+function escapeHTML(value){
+    return String(value).replace(/[&<>"']/g,function(c){
+        return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c];
+    });
+}
+</script>
+</body>
+</html>
